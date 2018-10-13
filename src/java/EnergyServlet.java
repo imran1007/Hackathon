@@ -4,8 +4,11 @@
  * and open the template in the editor.
  */
 
+import com.owlike.genson.Genson;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
+import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,20 +38,24 @@ public class EnergyServlet extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter())
-        {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet EnergyServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet EnergyServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+    
+    }
+    
+    
+    
+    private int getNumberOfParameter(HttpServletRequest request) {
+        Map params = request.getParameterMap();
+        int j = 0;
+        Set<String> test = params.keySet();
+        j = test.stream().map((_item) -> 1).reduce(j, Integer::sum);
+
+        return j;
+    }
+
+    
+   
+    private Client genrerateRandomClient() {
+        return new Client ("Jean","Smith");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -79,7 +86,10 @@ public class EnergyServlet extends HttpServlet
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        processRequest(request, response);
+        String action = request.getParameter("action");
+        Genson genson = new Genson();
+        Client c = genrerateRandomClient();
+        response.getWriter().write(genson.serialize(c));
     }
 
     /**
